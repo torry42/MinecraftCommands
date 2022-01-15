@@ -1,0 +1,14 @@
+name: Commands
+version: '${project.version}'
+main: com.torry.commands.Commands
+api-version: 1.18
+authors: [torry42]
+description: commands that can be used
+commands:
+    feed:
+        description: makes you feel like you have eat an elephant
+        aliases: [eat, food]
+    wild:
+        description: makes teleport to a random location
+        aliases: rtp
+        usage: "Usage: /<command> [bounded | radius] radius-number"
