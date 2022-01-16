@@ -2,7 +2,6 @@ package com.torry.commands;
 
 import com.torry.commands.command.FeedCommand;
 import com.torry.commands.command.WildCommand;
-import com.torry.commands.tabCompleter.WildTabCompleter;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -26,7 +25,7 @@ public final class Commands extends JavaPlugin {
 
         getCommand("feed").setExecutor(new FeedCommand());
         getCommand("wild").setExecutor(new WildCommand());
-        getCommand("wild").setTabCompleter(new WildTabCompleter());
+        getCommand("wild").setTabCompleter(new WildCommand());
 
     }
 

@@ -6,13 +6,16 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class WildCommand implements CommandExecutor {
+
+public class WildCommand implements TabExecutor {
 
     Plugin plugin = Commands.getInstance();
 
@@ -32,13 +35,21 @@ public class WildCommand implements CommandExecutor {
 
                 switch (args[0]) {
                     case "bounded":
-                        return bounded_cmd(player, world);
+                        if (player.hasPermission("commands.wildcommand.bounded")) {
+                            return bounded_cmd(player, world);
+                        } else {
+                            player.sendMessage(ChatColor.RED + "you don't have permission to use /" + command.getName() + " bounded");
+                        }
 
                     case "radius":
-                        return radius_cmd(player, world, args);
+                        if (player.hasPermission("commands.wildcommand.radius")) {
+                            return radius_cmd(player, world, args);
+                        } else {
+                            player.sendMessage(ChatColor.RED + "you don't have permission to use /" + command.getName() + " radius");
+                        }
                 }
             } else {
-                player.sendMessage(ChatColor.RED + "you don't have permission to use this command");
+                player.sendMessage(ChatColor.RED + "you don't have permission to use " + command.getName());
             }
 
         } else {
@@ -46,6 +57,33 @@ public class WildCommand implements CommandExecutor {
         }
 
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+
+            List<String> recommandedArgs = new ArrayList<>();
+            recommandedArgs.add("bounded");
+            recommandedArgs.add("radius");
+
+            List<String> resultArgs = new ArrayList<>();
+
+            if (args.length == 0) {
+                return recommandedArgs;
+            } else if (args.length == 1) {
+                for (String s: recommandedArgs) {
+                    if (s.startsWith(args[0])) {
+                        resultArgs.add(s);
+                    }
+                }
+            }
+
+            return resultArgs;
+        }
+
+        return null;
     }
 
     public boolean bounded_cmd(Player player, World world) {
